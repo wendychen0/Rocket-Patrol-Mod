@@ -10,11 +10,16 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+
+        this.load.audio('music', './assets/game-music.mp3');
       }
 
     create() {
       // place tile sprite
       this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+
+      let sfx = this.sound.add('music');
+      sfx.play();
 
       // green UI background
       this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
@@ -152,6 +157,7 @@ class Play extends Phaser.Scene {
         this.scoreLeft.text = this.p1Score;  
         this.sound.play('sfx_explosion');
         
+        // add 2 seconds to timer when a ship is hit
         this.clock.delay += ship.points * 200;
         this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());   
     }
