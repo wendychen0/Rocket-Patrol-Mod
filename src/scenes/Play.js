@@ -57,6 +57,8 @@ class Play extends Phaser.Scene {
 
       // initialize score
       this.p1Score = 0;
+
+      this.reached = true;
       // display score
       let scoreConfig = {
         fontFamily: 'Courier',
@@ -98,6 +100,13 @@ class Play extends Phaser.Scene {
 
     }
     update() {
+      if (Math.trunc(this.clock.elapsed/1000) == 30 && this.reached) {
+        this.ship01.moveSpeed += 1.5;
+        this.ship02.moveSpeed += 1.5;
+        this.ship03.moveSpeed += 1.5;
+        this.ship04.moveSpeed += 1.5;
+        this.reached = false;
+      }
       // check key input for restart
       if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
         this.scene.restart();
