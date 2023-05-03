@@ -7,7 +7,8 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('spaceship2', './assets/spaceship2.png');
-        this.load.image('starfield', './assets/starfield.png');
+        //this.load.image('starfield', './assets/starfield.png');
+        this.load.image('space', './assets/space.png');
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
@@ -17,7 +18,8 @@ class Play extends Phaser.Scene {
 
     create() {
       // place tile sprite
-      this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+      //this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+      this.space = this.add.tileSprite(0, 0, 640, 480, 'space').setOrigin(0, 0);
 
       let sfx = this.sound.add('music', {volume: 0.2});
       sfx.loop = true;
@@ -104,7 +106,7 @@ class Play extends Phaser.Scene {
 
       this.timeLeft = this.add.text(borderUISize + borderPadding + 300, borderUISize + borderPadding*2, this.p1Score, clockConfig);
       this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
-      this.fireText = this.add.text(borderUISize + borderPadding + 125, borderUISize + borderPadding*2, "FIRE", scoreConfig);
+      this.fireText = this.add.text(borderUISize + borderPadding + 125, borderUISize + borderPadding*2, "FIRE", clockConfig);
       this.fireText.setVisible(false);
       this.highscoreText = this.add.text(borderUISize + borderPadding + 425, borderUISize + borderPadding*2, `HI:${highscore}`, highScConfig);
 
@@ -145,7 +147,8 @@ class Play extends Phaser.Scene {
       }
       this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
 
-      this.starfield.tilePositionX -= 4;
+      //this.starfield.tilePositionX -= 4;
+      this.space.tilePositionX -= 4;
 
       if (!this.gameOver) {               
         this.p1Rocket.update();         // update rocket sprite
@@ -211,8 +214,21 @@ class Play extends Phaser.Scene {
         this.p1Score += ship.points;
         console.log('score',this.p1Score);
         this.scoreLeft.text = this.p1Score;  
-        this.sound.play('sfx_explosion');
-        
+        let num = Math.floor(Math.random() * 4);
+        //this.sound.play('sfx_explosion');
+        console.log(num);
+        if (num == 0) {
+          this.sound.play('explosion1');
+        }
+        if (num == 1) {
+          this.sound.play('explosion2');
+        }
+        if (num == 2) {
+          this.sound.play('explosion3');
+        }
+        if (num == 3) {
+          this.sound.play('explosion4');
+        }
         // add 1 second to timer when a ship is hit
         this.clock.delay += ship.points * 100;
         this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());   
