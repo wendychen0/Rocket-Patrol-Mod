@@ -102,10 +102,11 @@ class Play extends Phaser.Scene {
         fixedWidth: 115
       }
 
-      this.timeLeft = this.add.text(borderUISize + borderPadding+300, borderUISize + borderPadding*2, this.p1Score, clockConfig);
+      this.timeLeft = this.add.text(borderUISize + borderPadding + 300, borderUISize + borderPadding*2, this.p1Score, clockConfig);
       this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
-    
-      this.highscoreText = this.add.text(borderUISize + borderPadding+425, borderUISize + borderPadding*2, `HI:${highscore}`, highScConfig);
+      this.fireText = this.add.text(borderUISize + borderPadding + 125, borderUISize + borderPadding*2, "FIRE", scoreConfig);
+      this.fireText.setVisible(false);
+      this.highscoreText = this.add.text(borderUISize + borderPadding + 425, borderUISize + borderPadding*2, `HI:${highscore}`, highScConfig);
 
       // GAME OVER flag
       this.gameOver = false;
@@ -153,6 +154,14 @@ class Play extends Phaser.Scene {
         this.ship03.update();
         this.ship04.update();
       } 
+
+      // FIRE UI
+      if (this.p1Rocket.isFiring == true) {
+        this.fireText.setVisible(true);
+      }
+      if (this.p1Rocket.isFiring == false) {
+        this.fireText.setVisible(false);
+      }
 
       // check collisions
       if(this.checkCollision(this.p1Rocket, this.ship03)) {
