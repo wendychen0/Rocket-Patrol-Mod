@@ -34,10 +34,14 @@ class Menu extends Phaser.Scene {
       menuConfig.backgroundColor = '#600E93'; //dark purple
       menuConfig.color = '#C3B1E1'; //pastel purple
       menuConfig.fontSize = 28;
-      this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
+      this.add.text(game.config.width/2, game.config.height/2 - 20, 'Use the mouse to move & click/(F) to fire', menuConfig).setOrigin(0.5); //←→
       menuConfig.backgroundColor = '#22447A';//'#00FF00';
       menuConfig.color = '#B5DDF0';//'#000';
-      this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+      this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding - 20, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+
+      menuConfig.backgroundColor = '#33658A';
+      menuConfig.color = '#DB995A';
+      this.add.text(game.config.width/2, game.config.height/2 + borderUISize*2 + borderPadding*2 + 50, 'High Score: ' + highscore, menuConfig).setOrigin(0.5);
 
       // define keys
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);

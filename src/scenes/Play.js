@@ -19,7 +19,8 @@ class Play extends Phaser.Scene {
       // place tile sprite
       this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
-      let sfx = this.sound.add('music');
+      let sfx = this.sound.add('music', {volume: 0.2});
+      sfx.loop = true;
       sfx.play();
 
       // green UI background
@@ -58,6 +59,10 @@ class Play extends Phaser.Scene {
       // initialize score
       this.p1Score = 0;
 
+      input = this.input;
+      input.on('pointerdown', this.clicked, this);
+      input.on('pointerup', this.notClicked, this);
+
       this.reached = true;
       // display score
       let scoreConfig = {
@@ -84,10 +89,24 @@ class Play extends Phaser.Scene {
         },
         fixedWidth: 90
       }
+      let highScConfig = {
+        fontFamily: 'Courier',
+        fontSize: '26px',
+        backgroundColor: '#F3B141',
+        color: '#843605',
+        align: 'center',
+        padding: {
+          top: 5,
+          bottom: 5,
+        },
+        fixedWidth: 115
+      }
 
-      this.timeLeft = this.add.text(borderUISize + borderPadding+450, borderUISize + borderPadding*2, this.p1Score, clockConfig);
+      this.timeLeft = this.add.text(borderUISize + borderPadding+300, borderUISize + borderPadding*2, this.p1Score, clockConfig);
       this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
     
+      this.highscoreText = this.add.text(borderUISize + borderPadding+425, borderUISize + borderPadding*2, `HI:${highscore}`, highScConfig);
+
       // GAME OVER flag
       this.gameOver = false;
       // 60-second play clock
@@ -100,6 +119,9 @@ class Play extends Phaser.Scene {
 
     }
     update() {
+      cursorx = input.x;
+      cursory = input.y;
+      // increase rocket speeds after 30 secs
       if (Math.trunc(this.clock.elapsed/1000) == 30 && this.reached) {
         this.ship01.moveSpeed += 1.5;
         this.ship02.moveSpeed += 1.5;
@@ -109,9 +131,15 @@ class Play extends Phaser.Scene {
       }
       // check key input for restart
       if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+        if (this.p1Score > highscore) {
+          highscore = this.p1Score;
+        }
         this.scene.restart();
       }
       if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if (this.p1Score > highscore) {
+          highscore = this.p1Score;
+        }
         this.scene.start("menuScene");
       }
       this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());
@@ -172,11 +200,18 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
+        console.log('score',this.p1Score);
         this.scoreLeft.text = this.p1Score;  
         this.sound.play('sfx_explosion');
         
         // add 1 second to timer when a ship is hit
         this.clock.delay += ship.points * 100;
         this.timeLeft.text = Math.trunc(this.clock.getOverallRemainingSeconds());   
+    }
+    clicked(){
+      mousedown = true;
+    }
+    notClicked(){
+      mousedown = false;
     }
 }
